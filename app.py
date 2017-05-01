@@ -5,7 +5,6 @@ import json
 import requests
 from flask import Flask, request
 
-
 app = Flask(__name__)
 
 ACCESS_TOKEN = "<YOUR ACCESS TOKEN>"
@@ -14,7 +13,7 @@ VERIFY_TOKEN = "<YOUR VERIFY TOKEN>"
 
 @app.route('/', methods=['GET'])
 def verify():
-	# Used to verify the bot by Facebook
+    # Used to verify the bot by Facebook
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         if not request.args.get("hub.verify_token") == VERIFY_TOKEN:
             return "Verification token mismatch", 403
@@ -30,20 +29,19 @@ def webhook():
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
 
-            	# If it is a message 
-                if messaging_event.get("message"): 
-
-                	# Facebook ID of sender
+                # If it is a message
+                if messaging_event.get("message"):
+                    # Facebook ID of sender
                     sender_id = messaging_event["sender"]["id"]
                     # Page ID        
-                    recipient_id = messaging_event["recipient"]["id"]  
-                    #Actual Message
-                    message_text = messaging_event["message"]["text"]  
+                    recipient_id = messaging_event["recipient"]["id"]
+                    # Actual Message
+                    message_text = messaging_event["message"]["text"]
 
                     send_message(sender_id, message_text)
 
                 if messaging_event.get("delivery") or messaging_event.get("optin") or messaging_event.get("postback"):
-                	# if any other type of event, just pass
+                    # if any other type of event, just pass
                     pass
 
     return "ok", 200
