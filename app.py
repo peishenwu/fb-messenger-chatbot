@@ -1,14 +1,17 @@
 import os
 import sys
 import json
+import configparser
 
 import requests
 from flask import Flask, request
 
+config = configparser.ConfigParser()
+config.read("info.cfg")
 app = Flask(__name__)
 
-ACCESS_TOKEN = "<YOUR ACCESS TOKEN>"
-VERIFY_TOKEN = "<YOUR VERIFY TOKEN>"
+ACCESS_TOKEN = config.get("TOKENS", "access_token")
+VERIFY_TOKEN = config.get("TOKENS", "verify_token")
 
 
 @app.route('/', methods=['GET'])
